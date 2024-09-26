@@ -1,29 +1,33 @@
 name: CI/CD Pipeline
 
+# Define quando o workflow será acionado
 on:
   push:
     branches:
-      - main  
+      - main  # O workflow será acionado quando houver um push na branch "main"
   pull_request:
     branches:
-      - main  
+      - main  # Também será acionado em pull requests para a branch "main"
 
+# Define os jobs que serão executados
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+    # Etapa 1: Checkout do código-fonte do repositório
     - name: Checkout repository
       uses: actions/checkout@v2
 
-   
+    # Etapa 2: Configurar o Docker Buildx para construir a imagem Docker
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
 
-   
+    # Etapa 3: Fazer login no Docker Hub
     - name: Log in to Docker Hub
       run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
+    # Etapa 4: Compilar a imagem Docker e enviar para o Docker Hub
     - name: Build and push Docker image
       run: |
         docker build -t ${{ secrets.DOCKER_USERNAME }}/simple-website:latest .
@@ -31,9 +35,28 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build  
+    needs: build  # Este job depende da conclusão do job de build
 
     steps:
-
+    # Etapa 5: Checkout do código-fonte do repositório
     - name: Checkout repository
-    
+      uses: actions/checkout@v2
+
+    # Etapa 6: Instalar o kubectl e Helm para fazer o deploy no Kubernetes
+    - name: Set up kubectl
+      uses: azure/setup-kubectl@v1
+      with:
+        version: 'latest'
+
+    - name: Set up Helm
+      uses: azure/setup-helm@v1
+      with:
+        version: 'latest'
+
+    # Etapa 7: Aplicar o Helm Chart e fazer o deploy no cluster Kubernetes
+    - name: Deploy to Kubernetes
+      run: |
+        helm upgrade --install simple-website ./helm-chart \
+          --set image.repository=${{ secrets.DOCKER_USERNAME }}/simple-website \
+          --set image.tag=latest
+
