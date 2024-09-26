@@ -23,15 +23,13 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
 
-    # Etapa 3: Fazer login no Docker Hub
-    - name: Log in to Docker Hub
-      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+    # Etapa 3: Compilar a imagem Docker
+    - name: Build Docker image
+      run: docker build -t jonasbraganca/simple-website:latest .
 
-    # Etapa 4: Compilar a imagem Docker e enviar para o Docker Hub
-    - name: Build and push Docker image
-      run: |
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/simple-website:latest .
-        docker push ${{ secrets.DOCKER_USERNAME }}/simple-website:latest
+    # Etapa 4: Empurrar a imagem Docker para o Docker Hub (opcional)
+    # - name: Push Docker image to Docker Hub
+    #   run: docker push jonasbraganca/simple-website:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -57,6 +55,5 @@ jobs:
     - name: Deploy to Kubernetes
       run: |
         helm upgrade --install simple-website ./helm-chart \
-          --set image.repository=${{ secrets.DOCKER_USERNAME }}/simple-website \
+          --set image.repository=jonasbraganca/simple-website \
           --set image.tag=latest
-
