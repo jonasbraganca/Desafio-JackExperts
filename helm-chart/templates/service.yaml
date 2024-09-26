@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: simple-website
+  labels:
+    app: simple-website
+    desafio: jackexperts
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: simple-website

@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-website
+  labels:
+    app: simple-website
+    desafio: jackexperts
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: simple-website
+  template:
+    metadata:
+      labels:
+        app: simple-website
+        desafio: jackexperts
+    spec:
+      containers:
+        - name: simple-website
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: 80

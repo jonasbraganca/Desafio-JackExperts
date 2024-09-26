@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: simple-website-ingress
+  labels:
+    app: simple-website
+    desafio: jackexperts
+spec:
+  rules:
+    - host: {{ .Values.ingress.hostname }}
+      http: 
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: simple-website
+                port:
+                  number: 80
