@@ -1,5 +1,4 @@
-name: CI/CD Pipeline
-
+name: CI/CD
 on:
   push:
     branches:
@@ -16,11 +15,10 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
 
-    # Constrói a imagem e faz o push diretamente para o Docker Hub (assumindo que a imagem é pública)
-    - name: Build and push Docker image
+    # Constrói a imagem localmente (sem fazer push para o Docker Hub)
+    - name: Build Docker image
       run: |
         docker build -t jonasbraganca/simple-website:latest .
-        docker push jonasbraganca/simple-website:latest
 
     # Instala o Helm e realiza o deploy da aplicação no Minikube
     - name: Deploy with Helm
