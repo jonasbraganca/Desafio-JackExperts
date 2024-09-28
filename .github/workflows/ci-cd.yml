@@ -13,35 +13,29 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # Instalação do Minikube
     - name: Install Minikube
       run: |
         sudo apt-get update -y
         sudo apt-get install -y curl apt-transport-https
         curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
         sudo install minikube-linux-amd64 /usr/local/bin/minikube
-
-    # Iniciar o Minikube
+        
     - name: Start Minikube
       run: |
         minikube start --driver=docker
         minikube status
 
-    # Configurar o Helm
     - name: Install Helm
       run: |
         curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 
-    # Set up Docker Buildx
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
 
-    # Build da imagem Docker
     - name: Build Docker image
       run: |
         docker build -t jonasbraganca/simple-website:latest .
 
-    # Instala o Helm e faz o deploy no Minikube
     - name: Deploy with Helm
       run: |
         helm repo add stable https://charts.helm.sh/stable
@@ -49,7 +43,6 @@ jobs:
           --set image.repository=jonasbraganca/simple-website \
           --set image.tag=latest
 
-    # Verificar os pods no Minikube
     - name: Get Pods
       run: |
         kubectl get pods
