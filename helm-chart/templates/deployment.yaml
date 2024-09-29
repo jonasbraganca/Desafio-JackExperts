@@ -2,11 +2,14 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: simple-website
+  labels:
+    desafio: jackexperts
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: simple-website
+      desafio: jackexperts
   template:
     metadata:
       labels:
