@@ -6,6 +6,5 @@ RUN mkdir -p /var/cache/nginx/client_temp /var/run/nginx && \
 
 USER nginx
 
-# Exponha a porta 80
 EXPOSE 80
 
