@@ -4,20 +4,22 @@ metadata:
   name: simple-website
   labels:
     desafio: jackexperts
+    app: simple-website 
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: simple-website
-      desafio: jackexperts
+
   template:
     metadata:
       labels:
         app: simple-website
+        desafio: jackexperts
     spec:
       containers:
       - name: simple-website
-        image: nginx:alpine
+        image: jonasbraganca/simple-website:latest
         ports:
         - containerPort: 80
         volumeMounts:
