@@ -7,7 +7,7 @@ metadata:
     desafio: jackexperts
 spec:
   rules:
-    - host: {{ .Values.ingress.hostname }}
+    - host: simple-website.local 
       http: 
         paths:
           - path: /
