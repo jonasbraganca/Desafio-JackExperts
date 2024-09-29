@@ -2,23 +2,20 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: simple-website
-  labels:
-    desafio: jackexperts
-
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: simple-website
+
   template:
     metadata:
       labels:
         app: simple-website
-        desafio: jackexperts 
     spec:
       containers:
       - name: simple-website
-        image: nginx:alpine
+        image: jonasbraganca/simple-website:latest
         ports:
         - containerPort: 80
         volumeMounts:
